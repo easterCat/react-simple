@@ -10,7 +10,7 @@ module.exports = {
             path.resolve(__dirname, 'node_modules')
         ]
     },
-    entry: ["babel-polyfill", "./index.js"],
+    entry: "./index.js",
     output: {
         path: path.resolve(__dirname, 'dist'), //打包的文件夹
         filename: 'index.js',
@@ -40,13 +40,20 @@ module.exports = {
                     loader: 'image-webpack-loader'
                 }]
             },
+            {
+                test: /\.html$/,
+                use: [{
+                    loader: 'html-loader',
+                    options: {
+                        minimize: false
+                    }
+                }],
+            }
         ]
     },
     devServer: {
         contentBase: './dist',//为一个目录下的文件提供本地服务器，在这里设置其所在目录
         historyApiFallback: true,//跳转将指向index.html
-        // inline: true,//开启自动刷新页面
-        port: 1323,//设置监听端口1323
-        //hot: true,//开启热替换
+        port: 4332,//设置监听端口4332
     },
 };

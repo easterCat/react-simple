@@ -1,13 +1,14 @@
 /**
  * Created by easterCat on 2017/10/30.
  */
+const path = require('path');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = merge(common, {
     module: {
@@ -36,17 +37,17 @@ module.exports = merge(common, {
                     }]
                 })
             },
-            {
-                test: /index\.html/,
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name (file) {
-                            return '[name].[ext]'
-                        }
-                    }
-                }]
-            }
+            // {
+            //     test: /template\.html/,
+            //     use: [{
+            //         loader: 'file-loader',
+            //         options: {
+            //             name (file) {
+            //                 return 'index.[ext]'
+            //             }
+            //         }
+            //     }]
+            // }
         ]
     },
     plugins: [
@@ -75,6 +76,12 @@ module.exports = merge(common, {
                 drop_console: false,
                 warnings: false
             },
+        }),
+        new HtmlWebpackPlugin({
+            title: '中建八局',
+            filename: path.resolve(__dirname, 'dist/index.html'), // 生成的html存放路径
+            template: path.resolve(__dirname, 'src/index.html'), // html模板路径,
+            minify: false,
         }),
         new CleanWebpackPlugin(['dist', 'dist.zip', 'dist.rar']),
     ],

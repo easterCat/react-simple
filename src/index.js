@@ -1,23 +1,11 @@
 /**
- * Created by easterCat on 2018/1/16.
+ * Created by easterCat on 2018/1/25.
  */
 import './index.html';
-import "babel-polyfill";
 
+import React from './React'
+import ReactDOM from './React'
+import App from './App'
 
-import React from 'react';
-import ReactDom from 'react-dom';
-import Link from './components/Link';
-import {BrowserRouter, Route} from 'react-router-dom';
-import {Provider} from 'react-redux';
-import store from './store/store';
+ReactDOM.render(<App />, document.getElementById('root'));
 
-ReactDom.render(
-    <Provider store={store}>
-        <BrowserRouter>
-            <Route path="/" component={Link}/>
-        </BrowserRouter>
-    </Provider>
-    ,
-    document.getElementById('root')
-);
