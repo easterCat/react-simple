@@ -387,6 +387,9 @@ typings/
 # dotenv environment variables file
 .env
 
+# some floder ignore
 dist/
 dist.zip
 .project
+easter_utils/
+Luy/
