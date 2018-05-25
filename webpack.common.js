@@ -4,7 +4,7 @@
 const path = require('path');
 
 module.exports = {
-    context: path.resolve(__dirname, 'src'),
+    context: path.resolve(__dirname, 'Pine'),
     resolve: {
         modules: [
             path.resolve(__dirname, 'node_modules')
@@ -12,7 +12,7 @@ module.exports = {
     },
     entry: "./index.js",
     output: {
-        path: path.resolve(__dirname, 'dist'), //打包的文件夹
+        path: path.resolve(__dirname, 'pine_dist'), //打包的文件夹
         filename: 'index.js',
     },
     module: {
@@ -52,7 +52,7 @@ module.exports = {
         ]
     },
     devServer: {
-        contentBase: './dist',//为一个目录下的文件提供本地服务器，在这里设置其所在目录
+        contentBase: './Pine',//为一个目录下的文件提供本地服务器，在这里设置其所在目录
         historyApiFallback: true,//跳转将指向index.html
         port: 4332,//设置监听端口4332
     },
