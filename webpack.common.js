@@ -4,7 +4,7 @@
 const path = require('path');
 
 module.exports = {
-    context: path.resolve(__dirname, 'Pine'),
+    context: path.resolve(__dirname, 'Monika'),
     resolve: {
         modules: [
             path.resolve(__dirname, 'node_modules')
@@ -52,8 +52,8 @@ module.exports = {
         ]
     },
     devServer: {
-        contentBase: './Pine',//为一个目录下的文件提供本地服务器，在这里设置其所在目录
+        contentBase: './Monika',//为一个目录下的文件提供本地服务器，在这里设置其所在目录
         historyApiFallback: true,//跳转将指向index.html
-        port: 4332,//设置监听端口4332
+        port: 8888,//设置监听端口8888
     },
 };
