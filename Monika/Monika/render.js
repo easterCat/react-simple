@@ -1,59 +1,114 @@
 /**
  * Created by easterCat on 2018/5/30.
  */
+import Component from './component';
+import {setAttribute} from './dom';
 
-function render(vnode, container) {
-    //当vnode是一段字符串，渲染的是一段文本
+function _render(vnode) {
+    if (vnode === undefined || vnode === null || typeof vnode === 'boolean') vnode = '';
+
+    if (typeof vnode === 'number') vnode = String(vnode);
+
     if (typeof vnode === 'string') {
-        const textNode = document.createTextNode(vnode);
-        return container.appendChild(textNode);
+        let textNode = document.createTextNode(vnode);
+        return textNode;
+    }
+
+    if (typeof vnode.tag === 'function') {
+
+        const component = createComponent(vnode.tag, vnode.attrs);
+
+        setComponentProps(component, vnode.attrs);
+
+        return component.base;
     }
 
     const dom = document.createElement(vnode.tag);
 
     if (vnode.attrs) {
         Object.keys(vnode.attrs).forEach(key => {
+
             const value = vnode.attrs[key];
+
             setAttribute(dom, key, value);
-        })
+
+        });
     }
 
-    vnode.children.forEach(child => {
-        render(child, dom);
-    });
+    if (vnode.children) {
+        vnode.children.forEach(child => render(child, dom));
+    }
 
-    return container.appendChild(dom);
+    return dom;
+}
+
+function createComponent(component, props) {
+    let instance;
+
+    if (component.prototype && component.prototype.render) {
+        instance = new component(props);
+    } else {
+        instance = new component(props);
+        instance.constructor = component;
+        instance.render = function () {
+            return this.constructor(props);
+        }
+    }
+
+    return instance;
+}
+
+function unmountComponent(component) {
+    if (component.componentWillUnmount) component.componentWillUnmount();
+    removeNode(component.base);
 }
 
 
-function setAttribute(dom, name, value) {
-    //修改className=>class
-    if (name === 'className') name = 'class';
+function setComponentProps(component, props) {
 
-    //on + xxx，这是一个事件监听方法
-    if (/on\w+/.test(name)) {
-        name = name.toLowerCase();
-        dom[name] = value || '';
-    } else if (name === 'style') {
-        if (!value || typeof value === 'string') {
-            dom.style.cssText = value || '';
-        } else if (value && typeof value === 'object') {
-            for (let name in value) {
-                dom.style[name] = typeof value[name] === 'number' ? value[name] + 'px' : value[name];
-            }
-        }
-    } else {
-        if (name in dom) {
-            dom[name] = value || '';
-        }
-        if (value) {
-            dom.setAttribute(name, value);
-        } else {
-            dom.removeAttribute(name, value);
-        }
+    if (!component.base) {
+        if (component.componentWillMount) component.componentWillMount();
+    } else if (component.componentWillReceiveProps) {
+        component.componentWillReceiveProps(props);
     }
+
+    component.props = props;
+
+    renderComponent(component);
+}
+
+function renderComponent(component) {
+
+    let base;
+
+    const renderer = component.render();
+
+    if (component.base && component.componentWillUpdate) {
+        component.componentWillUpdate();
+    }
+
+    base = _render(renderer);
+
+    if (component.base) {
+        if (component.componentDidUpdate) component.componentDidUpdate();
+    } else if (component.componentDidMount) {
+        component.componentDidMount();
+    }
+
+    if (component.base && component.base.parentNode) {
+        component.base.parentNode.replaceChild(base, component.base);
+    }
+
+    component.base = base;
+    base._component = component;
+}
+
+
+function render(vnode, container) {
+    return container.appendChild(_render(vnode));
 }
 
 export {
     render,
+    renderComponent
 }

@@ -5,36 +5,62 @@ import './index.html';
 import React from './Monika/index.js';
 import ReactDOM from './Monika/ReactDOM';
 
+// const element = (
+//     <div>
+//         hello
+//         <span>
+//             world
+//         </span>
+//     </div>
+// );
+//
+// console.log(element);
 
-const element = (
-    <div>
-        hello
-        <span>
-            world
-        </span>
-    </div>
-);
+// function tick() {
+//     const element = (
+//         <div>
+//             <span>
+//                 hello world
+//             </span>
+//             <span>
+//                 {
+//                     new Date().toLocaleString()
+//                 }
+//             </span>
+//         </div>
+//     );
+//
+//     ReactDOM.render(
+//         element,
+//         document.getElementById('root')
+//     )
+// }
+//
+// setInterval(tick, 1000);
 
-console.log(element);
+class Counter extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            num: 1
+        }
+    }
 
-function tick() {
-    const element = (
-        <div>
-            <span>
-                hello world
-            </span>
-            <span>
-                {
-                    new Date().toLocaleString()
-                }
-            </span>
-        </div>
-    );
+    onClick() {
+        this.setState({num: this.state.num + 1});
+    }
 
-    ReactDOM.render(
-        element,
-        document.getElementById('root')
-    )
+    render() {
+        return (
+            <div>
+                <h1>count: { this.state.num }</h1>
+                <button onClick={ () => this.onClick()}>add</button>
+            </div>
+        );
+    }
 }
 
-setInterval(tick, 1000);
+ReactDOM.render(
+    <Counter />,
+    document.getElementById('root')
+);

@@ -8,13 +8,10 @@
  * argument(tag,attr,child1,child2,...child(n))
  */
 function createElement(tag, attr, ...children) {
-    let str = 'hello world';
-
     return {
         tag,
         attr,
         children,
-        add: str
     }
 }
 
