@@ -15,10 +15,6 @@ class Component {
         Object.assign(this.state, stateChange);
         renderComponent(this);
     }
-
-    render() {
-
-    }
 }
 
 export default Component;
