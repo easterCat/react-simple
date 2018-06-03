@@ -110,5 +110,5 @@ function render(vnode, container) {
 
 export {
     render,
-    renderComponent
+    renderComponent,
 }
