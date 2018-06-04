@@ -1,7 +1,7 @@
 /**
  * Created by easterCat on 2018/5/31.
  */
-import {renderComponent} from './render';
+import {renderComponent} from './diff';
 
 class Component {
     constructor(props = {}) {
