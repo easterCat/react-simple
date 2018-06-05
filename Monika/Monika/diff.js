@@ -22,7 +22,6 @@ function diff(dom, vnode, container) {
     }
 
     return ret;
-
 }
 
 function diffNode(dom, vnode) {
@@ -56,7 +55,6 @@ function diffNode(dom, vnode) {
         return diffComponent(dom, vnode);
     }
 
-    //
     if (!dom || !isSameNodeType(dom, vnode)) {
         out = document.createElement(vnode.tag);
 
@@ -76,7 +74,6 @@ function diffNode(dom, vnode) {
     diffAttributes(out, vnode);
 
     return out;
-
 }
 
 function diffChildren(dom, vchildren) {
@@ -198,11 +195,8 @@ function setComponentProps(component, props) {
     }
 
     component.props = props;
-
     renderComponent(component);
-
 }
-
 
 function isSameNodeType(dom, vnode) {
     if (typeof vnode === 'string' || typeof vnode === 'number') {
