@@ -54,6 +54,6 @@ module.exports = {
     devServer: {
         contentBase: './Monika',//为一个目录下的文件提供本地服务器，在这里设置其所在目录
         historyApiFallback: true,//跳转将指向index.html
-        port: 8888,//设置监听端口8888
+        port: 3333,//设置监听端口8888
     },
 };

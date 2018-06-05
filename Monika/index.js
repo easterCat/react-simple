@@ -42,12 +42,21 @@ class Counter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            num: 1
+            num: 0
+        }
+    }
+
+    componentWillMount() {
+        for (let i = 0; i <= 100; i++) {
+            this.setState({num: this.state.num++});
+            console.log(this.state.num);
         }
     }
 
     onClick() {
-        this.setState({num: this.state.num + 1});
+        this.setState({num: this.state.num + 1}, () => {
+            console.log(this.state.num);
+        });
     }
 
     render() {

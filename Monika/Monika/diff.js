@@ -1,5 +1,11 @@
 import {Componet} from './component'
-import {setAttribute} from './dom'
+import {setAttribute} from './dom';
+import {renderComponent, createComponent, unmountComponent} from './render'
+
+export {
+    diff,
+    diffNode
+}
 
 /**
  * @param {HTMLElement} dom 真实DOM
@@ -7,7 +13,7 @@ import {setAttribute} from './dom'
  * @param {HTMLElement} container 容器
  * @returns {HTMLElement} 更新后的DOM
  */
-export function diff(dom, vnode, container) {
+function diff(dom, vnode, container) {
 
     const ret = diffNode(dom, vnode);
 
@@ -197,54 +203,6 @@ function setComponentProps(component, props) {
 
 }
 
-export function renderComponent(component) {
-
-    let base;
-
-    const renderer = component.render();
-
-    if (component.base && component.componentWillUpdate) {
-        component.componentWillUpdate();
-    }
-
-    base = diffNode(component.base, renderer);
-
-    component.base = base;
-    base._component = component;
-
-    if (component.base) {
-        if (component.componentDidUpdate) component.componentDidUpdate();
-    } else if (component.componentDidMount) {
-        component.componentDidMount();
-    }
-
-    component.base = base;
-    base._component = component;
-
-}
-
-function createComponent(component, props) {
-
-    let inst;
-
-    if (component.prototype && component.prototype.render) {
-        inst = new component(props);
-    } else {
-        inst = new Component(props);
-        inst.constructor = component;
-        inst.render = function () {
-            return this.constructor(props);
-        }
-    }
-
-    return inst;
-
-}
-
-function unmountComponent(component) {
-    if (component.componentWillUnmount) component.componentWillUnmount();
-    removeNode(component.base);
-}
 
 function isSameNodeType(dom, vnode) {
     if (typeof vnode === 'string' || typeof vnode === 'number') {
@@ -288,10 +246,3 @@ function diffAttributes(dom, vnode) {
 
 }
 
-function removeNode(dom) {
-
-    if (dom && dom.parentNode) {
-        dom.parentNode.removeChild(dom);
-    }
-
-}

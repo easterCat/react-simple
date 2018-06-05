@@ -3,6 +3,14 @@
  */
 import Component from './component';
 import {setAttribute} from './dom';
+import {diffNode} from './diff';
+
+export {
+    render,
+    renderComponent,
+    createComponent,
+    unmountComponent
+}
 
 function _render(vnode) {
     if (vnode === undefined || vnode === null || typeof vnode === 'boolean') vnode = '';
@@ -63,6 +71,11 @@ function unmountComponent(component) {
     removeNode(component.base);
 }
 
+function removeNode(dom) {
+    if (dom && dom.parentNode) {
+        dom.parentNode.removeChild(dom);
+    }
+}
 
 function setComponentProps(component, props) {
 
@@ -87,7 +100,10 @@ function renderComponent(component) {
         component.componentWillUpdate();
     }
 
-    base = _render(renderer);
+    base = diffNode(component.base, renderer);
+
+    component.base = base;
+    base._component = component;
 
     if (component.base) {
         if (component.componentDidUpdate) component.componentDidUpdate();
@@ -95,20 +111,12 @@ function renderComponent(component) {
         component.componentDidMount();
     }
 
-    if (component.base && component.base.parentNode) {
-        component.base.parentNode.replaceChild(base, component.base);
-    }
-
     component.base = base;
     base._component = component;
 }
-
 
 function render(vnode, container) {
     return container.appendChild(_render(vnode));
 }
 
-export {
-    render,
-    renderComponent,
-}
+
