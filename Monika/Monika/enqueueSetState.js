@@ -12,11 +12,9 @@ export function enqueueSetState(stateChange, component, callback) {
         setTimeout(callback, 0);
     }
 
-    queue.push({
-        stateChange,
-        component
-    });
+    queue.push({stateChange, component});
 
+    //渲染组件只会渲染一次
     if (!renderQueue.some(item => item === component)) {
         renderQueue.push(component);
     }
@@ -26,7 +24,7 @@ function flush() {
     let item;
     let component;
 
-    while (item = queue.shift()) {
+    while ((item = queue.shift())) {
         const {stateChange, component} = item;
 
         //如果组件没有prevState，则将当前state作为初始prevState
@@ -34,12 +32,12 @@ function flush() {
             component.prevState = Object.assign({}, component.state);
         }
 
-        if (typeof stateChange === 'function') {
-            //如果第一个参数是一个函数，使用prevState来得到函数的返回值，然后再合并state
-            Object.assign(component.state, stateChange(component.prevState, component.props));
-        } else {
-            Object.assign(component.state, stateChange);
-        }
+        //如果第一个参数是一个函数，使用prevState来得到函数的返回值，然后再合并state
+        //如果是一个对象，就直接合并
+        Object.assign(component.state, typeof stateChange === 'function' ?
+            stateChange(component.prevState, component.props) :
+            stateChange
+        )
     }
 
     while (component = renderQueue.shift()) {
@@ -48,5 +46,9 @@ function flush() {
 }
 
 function defer(f) {
-    Promise.resolve().then(f);
+    if (typeof Promise === 'function') {
+        Promise.resolve().then(f);
+    } else {
+        setTimeout(f, 0);
+    }
 }
