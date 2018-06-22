@@ -6,7 +6,7 @@ import {setAttribute} from './dom';
 import {diffNode} from './diff';
 
 export {
-    render,
+    renderDom,
     renderComponent,
     createComponent,
     unmountComponent
@@ -115,7 +115,7 @@ function renderComponent(component) {
     base._component = component;
 }
 
-function render(vnode, container) {
+function renderDom(vnode, container) {
     return container.appendChild(_render(vnode));
 }
 

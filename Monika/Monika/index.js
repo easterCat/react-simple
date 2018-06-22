@@ -1,14 +1,17 @@
 /**
  * Created by fuhuo on 2018/5/26.
  */
-import {createElement as createEle, render} from './createElement';
+import {createElement} from './createElement';
 import Component from './component';
+import {renderDom} from './render';
 
 const React = {
-    createElement: createEle,
-    Component
+    createElement,
+    Component,
+    render: (vnode, container) => {
+        container.innerHTML = '';
+        return renderDom(vnode, container);
+    }
 };
-
-export const createElement = createEle;
 
 export default React;
