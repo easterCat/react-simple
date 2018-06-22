@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --hot --inline --devtool eval --progress --colors --config webpack.dev.js",
-    "build_win": "set NODE_ENV=production&&webpack -p --config webpack.pro.js"
+    "build_win": "set NODE_ENV=production&&webpack -p --config webpack.pro.js",
+    "rollup": "rollup -c rollup.config.js"
   },
   "repository": {
     "type": "git",
@@ -43,6 +44,7 @@
     "node-sass": "^4.7.2",
     "postcss-loader": "^2.0.8",
     "react-websocket": "^2.0.0",
+    "rollup-plugin-babel": "^3.0.4",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",
