@@ -18,7 +18,7 @@ describe('index.js', () => {
             }
 
             componentWillMount() {
-                for (let i = 0; i <= 100; i++) {
+                for (let i = 0; i < 100; i++) {
                     this.setState({num: this.state.num++});
                     if ((this.state.num / 10) && (this.state.num / 10 % 1 === 0)) {
                         document.write(`[ ${pathZero(this.state.num)} ] => </br>`);

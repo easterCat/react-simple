@@ -1,7 +1,7 @@
 /**
  * Created by easterCat on 2018/6/5.
  */
-import {renderComponent} from './render';
+import {renderComponent} from './vdom/component';
 
 let queue = [];
 let renderQueue = [];

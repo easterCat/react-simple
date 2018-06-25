@@ -1,33 +1,41 @@
 /**
  * Created by easterCat on 2018/5/30.
  */
-import Component from './component';
-import {setAttribute} from './dom';
-import {diffNode} from './diff';
+import {setAttribute} from './dom/dom';
+import {
+    createComponent,
+    setComponentProps
+} from './vdom/component';
 
 export {
     renderDom,
-    renderComponent,
-    createComponent,
-    unmountComponent
 }
 
-function _render(vnode) {
+/**
+ * 将虚拟dom渲染为真实dom
+ * @param vnode 接受的createElement返回的虚拟dom
+ * @param container 需要挂载的dom
+ * @returns {*|XML|Node}
+ */
+function renderDom(vnode, container) {
+    return container.appendChild(_renderDom(vnode));
+}
+
+function _renderDom(vnode) {
     if (vnode === undefined || vnode === null || typeof vnode === 'boolean') vnode = '';
 
+    // 当vnode为数字时，渲染结果是一段文本
     if (typeof vnode === 'number') vnode = String(vnode);
 
+    // 当vnode为字符串时，渲染结果是一段文本
     if (typeof vnode === 'string') {
         let textNode = document.createTextNode(vnode);
         return textNode;
     }
 
     if (typeof vnode.tag === 'function') {
-
         const component = createComponent(vnode.tag, vnode.attrs);
-
         setComponentProps(component, vnode.attrs);
-
         return component.base;
     }
 
@@ -35,11 +43,8 @@ function _render(vnode) {
 
     if (vnode.attrs) {
         Object.keys(vnode.attrs).forEach(key => {
-
             const value = vnode.attrs[key];
-
             setAttribute(dom, key, value);
-
         });
     }
 
@@ -50,73 +55,5 @@ function _render(vnode) {
     return dom;
 }
 
-function createComponent(component, props) {
-    let instance;
-
-    if (component.prototype && component.prototype.render) {
-        instance = new component(props);
-    } else {
-        instance = new component(props);
-        instance.constructor = component;
-        instance.render = function () {
-            return this.constructor(props);
-        }
-    }
-
-    return instance;
-}
-
-function unmountComponent(component) {
-    if (component.componentWillUnmount) component.componentWillUnmount();
-    removeNode(component.base);
-}
-
-function removeNode(dom) {
-    if (dom && dom.parentNode) {
-        dom.parentNode.removeChild(dom);
-    }
-}
-
-function setComponentProps(component, props) {
-
-    if (!component.base) {
-        if (component.componentWillMount) component.componentWillMount();
-    } else if (component.componentWillReceiveProps) {
-        component.componentWillReceiveProps(props);
-    }
-
-    component.props = props;
-
-    renderComponent(component);
-}
-
-function renderComponent(component) {
-
-    let base;
-
-    const renderer = component.render();
-
-    if (component.base && component.componentWillUpdate) {
-        component.componentWillUpdate();
-    }
-
-    base = diffNode(component.base, renderer);
-
-    component.base = base;
-    base._component = component;
-
-    if (component.base) {
-        if (component.componentDidUpdate) component.componentDidUpdate();
-    } else if (component.componentDidMount) {
-        component.componentDidMount();
-    }
-
-    component.base = base;
-    base._component = component;
-}
-
-function renderDom(vnode, container) {
-    return container.appendChild(_render(vnode));
-}
 
 
